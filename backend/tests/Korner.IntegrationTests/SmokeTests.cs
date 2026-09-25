@@ -15,4 +15,14 @@ public class SmokeTests(WebApplicationFactory<Program> factory) : IClassFixture<
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
+
+    [Fact]
+    public async Task Health_endpoint_returns_ok()
+    {
+        var client = factory.CreateClient();
+
+        var response = await client.GetAsync("/health");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }
