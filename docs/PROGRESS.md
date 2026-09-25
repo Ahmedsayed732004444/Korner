@@ -10,6 +10,7 @@
 - [x] T0.3 — Frontend app (React Router 7, pnpm, Tailwind 4, shadcn, ESLint/Prettier, Vitest, Playwright, Husky)
 - [x] T0.4 — `docker-compose.yml` (SQL Server, api, web), Dockerfiles, `.env.example`
 - [x] T0.5 — GitHub Actions (`backend.yml`, `frontend.yml`), Dependabot
+- [ ] Fix: no CI check that `docker compose up` still boots all three services (sqlserver/api/web) healthy. T0.4's acceptance was verified manually in the M0 session (all three reached `healthy`, web rendered `API: ok`) but nothing re-runs that on every push — a compose-breaking change (bad healthcheck, wrong port, missing env var) would go unnoticed until someone runs it by hand. A minimal `docker compose up -d --wait` + curl smoke step (its own workflow or folded into an `e2e.yml` later) would close this gap.
 
 ## M1 — Backend foundation & authentication
 
