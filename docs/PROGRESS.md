@@ -9,7 +9,7 @@
 - [x] T0.2 — Backend solution (`Korner.sln`, `Korner.Api`, unit/integration test projects, `Directory.Build.props`, `Directory.Packages.props`)
 - [x] T0.3 — Frontend app (React Router 7, pnpm, Tailwind 4, shadcn, ESLint/Prettier, Vitest, Playwright, Husky)
 - [x] T0.4 — `docker-compose.yml` (SQL Server, api, web), Dockerfiles, `.env.example`
-- [ ] T0.5 — GitHub Actions (`backend.yml`, `frontend.yml`), Dependabot
+- [x] T0.5 — GitHub Actions (`backend.yml`, `frontend.yml`), Dependabot
 
 ## M1 — Backend foundation & authentication
 

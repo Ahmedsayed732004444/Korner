@@ -29,7 +29,7 @@ Monorepo: `backend/` (ASP.NET Core 9 + SQL Server) and `frontend/` (React Router
 docker compose up -d
 ```
 
-This starts SQL Server, the API (`https://api.localhost` in dev, see `docker-compose.yml`) and the web app.
+This starts SQL Server, the API (`http://localhost:5080`) and the web app (`http://localhost:3000`).
 The web app calls the API's `/health` endpoint on its placeholder page once both are up.
 
 ## Backend
@@ -64,6 +64,11 @@ git check-ignore -v backend/src/Korner.Api/appsettings.Local.json .env
 ```
 
 See `docs/SECRETS.md` for what each key is for and its current status.
+
+[GitHub secret scanning](https://docs.github.com/en/code-security/secret-scanning) runs automatically on this
+public repo and alerts on known credential patterns (including push protection, which blocks a push that
+contains one). It's a safety net, not a substitute for the rules above — a secret that isn't a recognised
+pattern (e.g. a bespoke password) won't be caught by it.
 
 ## Contributing
 
