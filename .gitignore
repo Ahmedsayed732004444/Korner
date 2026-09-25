@@ -1,0 +1,36 @@
+# ---- secrets (the repository is PUBLIC) ----
+.env
+.env.*
+!.env.example
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+*.pfx
+*.pem
+
+# ---- uploaded images (runtime data, backed up separately) ----
+backend/src/Korner.Api/wwwroot/uploads/
+
+# ---- .NET ----
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.trx
+
+# ---- Node / frontend ----
+node_modules/
+frontend/build/
+frontend/.react-router/
+frontend/playwright-report/
+frontend/test-results/
+frontend/coverage/
+.lighthouseci/
+
+# ---- OS / editors ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
