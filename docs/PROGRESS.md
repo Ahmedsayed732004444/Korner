@@ -15,7 +15,7 @@
 ## M1 — Backend foundation & authentication
 
 - [x] T1.1 — `Result`/`Error`/`ToProblem`/`PaginatedList`/`RequestFilters`, global exception handler (+ Sentry, no-op until `Sentry:Dsn` is set), FluentValidation auto-validation. `Program.cs` now follows the target `AddKorner`/`UseKorner` shape from technical design §3.1.
-- [ ] T1.2 — Options classes + `ValidateOnStart`, `GET /config/public`, `TimeProvider`, Serilog
+- [x] T1.2 — Options classes (Jwt/Auth/Authentication:Google/MailSettings/PaymobSettings/HangfireSettings/Storage) + `ValidateOnStart`, `GET /config/public` (`walletEnabled`/`cardEnabled` only for now — `maintenanceMode`/`freeShippingThresholdPiasters`/`whatsAppNumber` need the `Setting` entity, T1.3), `TimeProvider`, Serilog (JSON console, redaction enricher by property name). Integration tests use their own fake config (`TestConfigurationDefaults`) — CI has no real secrets.
 - [ ] T1.3 — `ApplicationDbContext`, first migration, seed runner, Hangfire (`KornerJobs` DB, `/jobs`), `HybridCache`
 - [ ] T1.4 — Security headers, CORS, `OriginCheckMiddleware`, rate limit policies, maintenance-mode hook, `/health`
 - [ ] T1.5 — Identity, JWT, refresh tokens, register/login/refresh/logout/confirm-email/forgot/reset, Outbox email

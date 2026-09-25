@@ -28,6 +28,11 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    # appsettings.Local.json never reaches this container (excluded by
+    # backend/.dockerignore, same as it's excluded from git) — every T1.2 Options class
+    # this needs at startup (Jwt, Auth, Authentication:Google, MailSettings,
+    # PaymobSettings, HangfireSettings, Storage) comes from .env instead.
+    env_file: .env
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=Korner;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
