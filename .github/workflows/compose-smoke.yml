@@ -1,0 +1,46 @@
+name: compose-smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docker-compose.yml"
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/compose-smoke.yml"
+  pull_request:
+    paths:
+      - "docker-compose.yml"
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/compose-smoke.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    # Dummy password for an ephemeral, CI-only SQL Server container — never
+    # a real secret, and the container is destroyed at the end of this job.
+    env:
+      MSSQL_SA_PASSWORD: "CiSmoke-Test-Only!23"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start the stack
+        # SQL Server's own healthcheck already allows for a slow first-run DB copy
+        # (docker-compose.yml); this just needs to outlast that plus api/web startup.
+        run: docker compose up -d --build --wait --wait-timeout 420
+
+      - name: Check API /health
+        run: curl -sf http://localhost:5080/health
+
+      - name: Check web renders and calls the API
+        run: |
+          curl -sf http://localhost:3000/ | grep -q "API: ok"
+
+      - name: Show logs
+        if: always()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

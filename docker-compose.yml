@@ -9,15 +9,20 @@ services:
     volumes:
       - sqlserver-data:/var/opt/mssql
     healthcheck:
+      # A fresh container (always the case in CI, and the first `docker compose up`
+      # locally) copies template DB files before it can accept connections, which
+      # can take a few minutes — generous timeout/retries avoid a false "unhealthy"
+      # before that finishes. `docker compose up --wait` treats "unhealthy" as
+      # terminal, not "keep waiting", so this must outlast startup, not just react to it.
       test:
         [
           "CMD-SHELL",
           "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b -o /dev/null",
         ]
       interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
 
   api:
     build:
