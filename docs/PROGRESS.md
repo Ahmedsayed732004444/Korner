@@ -14,7 +14,7 @@
 
 ## M1 — Backend foundation & authentication
 
-- [ ] T1.1 — `Result`/`Error`/`ToProblem`/`PaginatedList`/`RequestFilters`, global exception handler, FluentValidation auto-validation
+- [x] T1.1 — `Result`/`Error`/`ToProblem`/`PaginatedList`/`RequestFilters`, global exception handler (+ Sentry, no-op until `Sentry:Dsn` is set), FluentValidation auto-validation. `Program.cs` now follows the target `AddKorner`/`UseKorner` shape from technical design §3.1.
 - [ ] T1.2 — Options classes + `ValidateOnStart`, `GET /config/public`, `TimeProvider`, Serilog
 - [ ] T1.3 — `ApplicationDbContext`, first migration, seed runner, Hangfire (`KornerJobs` DB, `/jobs`), `HybridCache`
 - [ ] T1.4 — Security headers, CORS, `OriginCheckMiddleware`, rate limit policies, maintenance-mode hook, `/health`

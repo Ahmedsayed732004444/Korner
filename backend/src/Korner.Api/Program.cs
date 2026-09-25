@@ -1,3 +1,6 @@
+using Korner.Api.Extensions;
+using Sentry;
+
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsDevelopment())
@@ -5,21 +8,19 @@ if (builder.Environment.IsDevelopment())
     builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 }
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+// No-ops until Sentry:Dsn is configured (docs/SECRETS.md: not provided yet, due T7.7-T7.10).
+SentrySdk.Init(options =>
+{
+    // An empty string (not null) is what tells the SDK to disable itself.
+    options.Dsn = builder.Configuration["Sentry:Dsn"] ?? string.Empty;
+    options.Environment = builder.Environment.EnvironmentName;
+});
+
+builder.Services.AddKorner(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-// Minimal placeholder for T0.4 (compose healthcheck + frontend probe). T1.4 replaces this
-// with the real /health that also checks DB connectivity and outbox lag.
-app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
-
-app.MapControllers();
+app.UseKorner();
 
 app.Run();
 
