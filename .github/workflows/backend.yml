@@ -1,0 +1,53 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (0 warnings)
+        run: dotnet build --no-restore
+
+      - name: Unit tests
+        run: dotnet test tests/Korner.UnitTests --no-build
+
+      # Testcontainers pulls its own SQL Server image; ubuntu-latest runners
+      # have Docker available out of the box.
+      - name: Integration tests
+        run: dotnet test tests/Korner.IntegrationTests --no-build
+
+      - name: Check for known-vulnerable packages
+        run: dotnet list package --vulnerable --include-transitive
+
+  docker-build:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t korner-api:ci ./backend

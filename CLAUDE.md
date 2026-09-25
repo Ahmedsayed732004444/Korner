@@ -37,6 +37,7 @@ If a spec is ambiguous or wrong, stop and ask (write it in the PR and in `docs/P
 15. **Images are stored on the API server** (`IFileStorage` → `wwwroot/uploads`, WebP 480/960/1440), never a cloud image service. Store relative paths only.
 16. **Owner's recipes:** for Hangfire, HybridCache and rate limiting follow `https://github.com/Ahmedsayed732004444/dotnet-recipes` (clone it outside this repo for reference).
 17. Only build `MVP` requirements. `P2`/`P3` items are out of scope unless a task says otherwise. Cash on delivery and shipping-company APIs are **out of scope**.
+18. **Chat language:** always reply to the owner in Egyptian Arabic (colloquial `عامية مصرية`). Code, comments, commit messages and PR titles/descriptions stay in English.
 
 ## Commands
 

@@ -1,0 +1,9 @@
+.react-router
+build
+node_modules
+.git
+.env
+tests
+playwright-report
+test-results
+coverage
