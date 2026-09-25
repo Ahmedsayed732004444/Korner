@@ -18,12 +18,48 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    # Dummy password for an ephemeral, CI-only SQL Server container — never
-    # a real secret, and the container is destroyed at the end of this job.
-    env:
-      MSSQL_SA_PASSWORD: "CiSmoke-Test-Only!23"
     steps:
       - uses: actions/checkout@v4
+
+      # Every value below is a dummy for this ephemeral, CI-only stack (destroyed at the
+      # end of this job) — never a real secret. docker-compose.yml's api service reads
+      # this via env_file for the T1.2 Options classes it needs at startup.
+      - name: Create a dummy .env
+        run: |
+          cat <<'EOF' > .env
+          MSSQL_SA_PASSWORD=CiSmoke-Test-Only!23
+          Jwt__Key=ci-smoke-test-signing-key-32-bytes-minimum!!
+          Jwt__Issuer=Korner.Smoke
+          Jwt__Audience=Korner.Smoke
+          Jwt__AccessTokenMinutes=15
+          Jwt__RefreshTokenDays=15
+          Auth__CookieDomain=localhost
+          Auth__StorefrontOrigins__0=http://localhost:3000
+          Authentication__Google__ClientId=ci-smoke-client-id
+          Authentication__Google__ClientSecret=ci-smoke-client-secret
+          Authentication__Google__RedirectUri=/signin-google
+          Authentication__Google__Scopes__0=openid
+          MailSettings__Mail=smoke@example.com
+          MailSettings__DisplayName=Korner Smoke
+          MailSettings__Password=ci-smoke-password
+          MailSettings__Host=smtp.example.com
+          MailSettings__Port=587
+          PaymobSettings__APIKey=ci-smoke-api-key
+          PaymobSettings__SecretKey=ci-smoke-secret-key
+          PaymobSettings__PublicKey=ci-smoke-public-key
+          PaymobSettings__HMAC=ci-smoke-hmac
+          PaymobSettings__CardIntegrationId=1
+          PaymobSettings__MobileIntegrationId=0
+          PaymobSettings__BaseUrl=https://accept.paymob.com/api/
+          PaymobSettings__ApiPublicUrl=https://smoke.example.com
+          PaymobSettings__StorefrontUrl=https://smoke.example.com
+          PaymobSettings__InquiryPath=api/ecommerce/orders/transaction_inquiry
+          PaymobSettings__ReservationMinutes=15
+          PaymobSettings__MaxAttemptsPerOrder=5
+          HangfireSettings__Username=ci-smoke-admin
+          HangfireSettings__Password=ci-smoke-password
+          Storage__PublicBaseUrl=http://localhost:5080
+          EOF
 
       - name: Start the stack
         # SQL Server's own healthcheck already allows for a slow first-run DB copy
